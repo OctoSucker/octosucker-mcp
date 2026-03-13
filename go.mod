@@ -17,5 +17,3 @@ require (
 	golang.org/x/oauth2 v0.34.0 // indirect
 	golang.org/x/sys v0.40.0 // indirect
 )
-
-replace github.com/OctoSucker/octosucker-tools => ../octosucker-tools
