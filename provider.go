@@ -41,7 +41,7 @@ func (s *Provider) Init(config map[string]interface{}) error {
 	defer s.mu.Unlock()
 	s.servers = nil
 	if config == nil {
-		log.Printf("skill-mcp: no config, no MCP servers configured")
+		log.Printf("tools-mcp: no config, no MCP servers configured")
 		return nil
 	}
 	raw, _ := config["servers"].([]interface{})
@@ -89,7 +89,7 @@ func (s *Provider) Cleanup() error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.servers = nil
-	log.Printf("skill-mcp: cleaned up")
+	log.Printf("tools-mcp: cleaned up")
 	return nil
 }
 
@@ -126,7 +126,7 @@ var globalProvider *Provider
 func RegisterMCPSkill(registry *tools.ToolRegistry, agent interface{}) error {
 	servers := globalProvider.getServers()
 	if len(servers) == 0 {
-		log.Printf("skill-mcp: no servers in config, skipping tool registration")
+		log.Printf("tools-mcp: no servers in config, skipping tool registration")
 		return nil
 	}
 	client := mcpkg.NewClient(&mcpkg.Implementation{Name: "octosucker-mcp-skill", Version: "1.0.0"}, nil)
@@ -138,7 +138,7 @@ func RegisterMCPSkill(registry *tools.ToolRegistry, agent interface{}) error {
 		case "sse":
 			transport = &mcpkg.SSEClientTransport{Endpoint: ent.URL, HTTPClient: httpClient}
 		case "stdio":
-			log.Printf("skill-mcp: server %s uses stdio transport which is no longer supported, skipping", ent.ID)
+			log.Printf("tools-mcp: server %s uses stdio transport which is no longer supported, skipping", ent.ID)
 			continue
 		default:
 			transport = &mcpkg.StreamableClientTransport{Endpoint: ent.URL, HTTPClient: httpClient}
@@ -147,7 +147,7 @@ func RegisterMCPSkill(registry *tools.ToolRegistry, agent interface{}) error {
 		session, err := client.Connect(ctx, transport, nil)
 		cancel()
 		if err != nil {
-			log.Printf("skill-mcp: connect to %s (%s) failed: %v", ent.ID, ent.URL, err)
+			log.Printf("tools-mcp: connect to %s (%s) failed: %v", ent.ID, ent.URL, err)
 			continue
 		}
 		listCtx, listCancel := context.WithTimeout(context.Background(), defaultListTimeout)
@@ -155,7 +155,7 @@ func RegisterMCPSkill(registry *tools.ToolRegistry, agent interface{}) error {
 		listCancel()
 		_ = session.Close()
 		if err != nil {
-			log.Printf("skill-mcp: list tools %s failed: %v", ent.ID, err)
+			log.Printf("tools-mcp: list tools %s failed: %v", ent.ID, err)
 			continue
 		}
 		for _, t := range res.Tools {
