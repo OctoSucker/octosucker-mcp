@@ -1,4 +1,4 @@
-module github.com/OctoSucker/tools-mcp
+module github.com/OctoSucker/octosucker-mcp
 
 go 1.25.4
 
