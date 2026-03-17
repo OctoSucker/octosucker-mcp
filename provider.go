@@ -91,14 +91,14 @@ func (r *MCPRegistry) Init(servers []map[string]interface{}) error {
 	return nil
 }
 
-func LoadAllMCPProviders(registry *MCPRegistry, servers []map[string]interface{}) map[string]error {
-	if registry == nil || len(servers) == 0 {
+func (r *MCPRegistry) LoadAllMCPProviders(servers []map[string]interface{}) map[string]error {
+	if r == nil || len(servers) == 0 {
 		return nil
 	}
-	if err := registry.Init(servers); err != nil {
+	if err := r.Init(servers); err != nil {
 		return map[string]error{"mcp": err}
 	}
-	if err := registry.LoadTools(); err != nil {
+	if err := r.LoadTools(); err != nil {
 		return map[string]error{"mcp": err}
 	}
 	return nil
